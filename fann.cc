@@ -385,9 +385,13 @@ Handle<Value> NNet::Run(const Arguments &args)
         return VException("No arguments supplied");
 	if (!args[0]->IsArray())
         return VException("First argument should be array");
-	
+
 	Local<Array> datain = Array::Cast(*args[0]->ToObject());
 	fann_type *dataset_in = new fann_type[datain->Length()];
+	for (int i=0; i<datain->Length(); i++) {
+		dataset_in[i] = datain->Get(i)->NumberValue();
+	}
+
 	fann_type *result = fann_run(net->FANN, dataset_in);
 		
 	if (net->scale_present) {
