@@ -14,5 +14,5 @@ def configure(conf):
 def build(bld):
 	obj = bld.new_task_gen("cxx", "shlib", "node_addon")
 	obj.target = "fann"
-	obj.source = "fann.cc"
+	obj.source = "src/fann.cc"
 	obj.linkflags = ['-ldoublefann']
