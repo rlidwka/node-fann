@@ -13,7 +13,7 @@ console.log(net.training_algorithm, net.training_algorithm == 'BATCH');
 net.training_algorithm = "FANN_TRAIN_INCREMENTAL";
 console.log(net.training_algorithm, net.training_algorithm == 'INCREMENTAL');
 
-console.log(net.training_algorithms());
+console.log(net.get_training_algorithms());
 
 console.log(net.learning_rate, Math.abs(net.learning_rate-0.7) < 0.01);
 net.learning_rate = '123';
