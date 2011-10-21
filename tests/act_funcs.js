@@ -2,6 +2,7 @@
 var fann = require('../build/Release/fann');
 var net = new fann.standard(1,10,1);
 
+console.log(fann.get_activation_functions());
 console.log(net.get_activation_functions());
 
 console.log(net.activation_function(1, 0));

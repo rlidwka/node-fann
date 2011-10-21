@@ -602,6 +602,8 @@ void NNet::Initialize(Handle<Object> target)
 	target->Set(String::NewSymbol("shortcut"), t2->GetFunction());
 	target->Set(String::NewSymbol("sparse"), t3->GetFunction());
 //	target->Set(String::NewSymbol("clone"), t4->GetFunction());
+	target->Set(String::NewSymbol("get_training_algorithms"), FunctionTemplate::New(GetTrainingAlgorithmList)->GetFunction());
+	target->Set(String::NewSymbol("get_activation_functions"), FunctionTemplate::New(GetActivationFunctionList)->GetFunction());
 }
 
 extern "C" void init (Handle<Object> target)
