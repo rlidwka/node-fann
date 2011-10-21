@@ -1,9 +1,13 @@
 #include <v8.h>
 #include <node.h>
 #include <doublefann.h>
+#include <string.h>
 
 using namespace v8;
 using namespace node;
+
+const char TRAIN_PREFIX[]  = "FANN_TRAIN_";
+const int TRAIN_PREFIX_LEN = sizeof(TRAIN_PREFIX)-1;
  
 class NNet : public ObjectWrap
 {
@@ -20,23 +24,20 @@ class NNet : public ObjectWrap
 		static Handle<Value> NewSparse(const Arguments &args);
 		static Handle<Value> NewShortcut(const Arguments &args);
 		//static Handle<Value> CloneNet(const Arguments &args);
-		int GetSmth() {
-			return something;
+		static Handle<Value> GetTrainingAlgorithm(Local<String> property, const AccessorInfo &info);
+		static void SetTrainingAlgorithm(Local<String> property, Local<Value> value, const AccessorInfo& info);
+		static Handle<Value> GetTrainingAlgorithmList(const Arguments &args);
+		static Handle<Value> GetSmth(Local<String> property, const AccessorInfo &info) {
+			Local<Object> self = info.Holder();
+			NNet *net = ObjectWrap::Unwrap<NNet>(self);
+			return Integer::New(net->something);
 		};
-		static Handle<Value> GetSmth(const Arguments &args) {
-			HandleScope scope;
-			NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
-			return scope.Close(Integer::New(net->GetSmth()));
-		}
-		void SetSmth(int i) {
-			something = i;
+		static void SetSmth(Local<String> property, Local<Value> value, const AccessorInfo& info) {
+			Local<Object> self = info.Holder();
+			NNet *net = ObjectWrap::Unwrap<NNet>(self);
+			net->something = value->IntegerValue();
+//			something = value->IntegerValue();
 		};
-		static Handle<Value> SetSmth(const Arguments &args) {
-			HandleScope scope;
-			NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
-			net->SetSmth(args[0]->IntegerValue());
-			return Undefined();
-		}
 		static Handle<Value> Train(const Arguments &args);
 		static Handle<Value> TrainOnce(const Arguments &args);
 		static Handle<Value> Run(const Arguments &args);
@@ -48,6 +49,7 @@ class NNet : public ObjectWrap
 		static void PrototypeInit(Local<FunctionTemplate> t);
 		Handle<Value> MakeTrainData(const Arguments &args, struct fann_train_data **traindata);
 		Handle<Value> TrainOnData(struct fann_train_data *traindata, unsigned int max_epochs, unsigned int epochs_between_reports, float desired_error);
+		static Handle<Value> NormalizeAlgorithmName(const char* origname);
 };
 
 NNet::NNet()
@@ -225,6 +227,66 @@ Handle<Value> NNet::CreateShortcut(const Arguments &args)
 	FANN = fann_create_shortcut_array(len, layers);
 	delete[] layers;
 	return Undefined();
+}
+
+Handle<Value> NNet::NormalizeAlgorithmName(const char* origname)
+{
+	HandleScope scope;
+	char algname[32];
+	if (strncmp(origname, TRAIN_PREFIX, TRAIN_PREFIX_LEN) == 0) {
+		origname +=	TRAIN_PREFIX_LEN;
+	} 
+	strncpy(algname, origname, 31);
+	return scope.Close(String::New(origname));
+}
+
+Handle<Value> NNet::GetTrainingAlgorithm(Local<String> property, const AccessorInfo &info)
+{
+	HandleScope scope;
+	Local<Object> self = info.Holder();
+	NNet *net = ObjectWrap::Unwrap<NNet>(self);
+	enum fann_train_enum algo = fann_get_training_algorithm(net->FANN);
+	return scope.Close(NormalizeAlgorithmName(FANN_TRAIN_NAMES[algo]));
+}
+
+void NNet::SetTrainingAlgorithm(Local<String> property, Local<Value> value, const AccessorInfo& info)
+{
+	HandleScope scope;
+	Local<Object> self = info.Holder();
+	NNet *net = ObjectWrap::Unwrap<NNet>(self);
+	int size = sizeof(FANN_TRAIN_NAMES)/sizeof(char*);
+
+	if (value->IsString()) {
+		char algname[32];
+		char algname2[32+TRAIN_PREFIX_LEN];
+		String::Cast(*value)->WriteAscii(algname, 0, 31);
+		strcpy(algname2, TRAIN_PREFIX);
+		strcat(algname2, algname);
+		for (int i=0; i<size; i++) {
+			if (strcasecmp(algname, FANN_TRAIN_NAMES[i]) == 0 || strcasecmp(algname2, FANN_TRAIN_NAMES[i]) == 0) {
+				fann_set_training_algorithm(net->FANN, fann_train_enum(i));
+				break;
+			}
+		}
+	} else if (value->IsNumber()) {
+		int num = value->NumberValue();
+		if (num < size && num >= 0) {
+			fann_set_training_algorithm(net->FANN, fann_train_enum(num));
+		}
+	}
+}
+
+Handle<Value> NNet::GetTrainingAlgorithmList(const Arguments &args)
+{
+	HandleScope scope;
+	int size = sizeof(FANN_TRAIN_NAMES)/sizeof(char*);
+
+	Local<Array> result_arr = Array::New(size);
+	for (int i=0; i<size; i++) {
+		result_arr->Set(i, NormalizeAlgorithmName(FANN_TRAIN_NAMES[i]));
+	}
+	
+	return scope.Close(result_arr);
 }
 
 /* for FANN >= 2.2.0
@@ -410,11 +472,12 @@ Handle<Value> NNet::Run(const Arguments &args)
 void NNet::PrototypeInit(Local<FunctionTemplate> t)
 {
 	t->InstanceTemplate()->SetInternalFieldCount(1);
-	NODE_SET_PROTOTYPE_METHOD(t, "getsmth", GetSmth);
-	NODE_SET_PROTOTYPE_METHOD(t, "setsmth", SetSmth);
 	NODE_SET_PROTOTYPE_METHOD(t, "train", Train);
 	NODE_SET_PROTOTYPE_METHOD(t, "train_once", TrainOnce);
 	NODE_SET_PROTOTYPE_METHOD(t, "run", Run);
+	NODE_SET_PROTOTYPE_METHOD(t, "training_algorithms", GetTrainingAlgorithmList);
+	t->InstanceTemplate()->SetAccessor(String::New("x"), GetSmth, SetSmth);
+	t->InstanceTemplate()->SetAccessor(String::New("training_algorithm"), GetTrainingAlgorithm, SetTrainingAlgorithm);
 }
 
 void NNet::Initialize(Handle<Object> target)
