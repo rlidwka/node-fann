@@ -6,9 +6,11 @@ FANN (Fast Artificial Neural Network Library) is a free open source neural netwo
 
 ## Installation
 
+```
 $ node-waf configure
 $ node-waf build
 $ node-waf install
+```
 
 You will need [FANN library](http://leenissen.dk/fann/wp/download/) version _>= 2.1.0_.
 
