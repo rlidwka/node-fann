@@ -27,6 +27,8 @@ class NNet : public ObjectWrap
 		static Handle<Value> GetTrainingAlgorithm(Local<String> property, const AccessorInfo &info);
 		static void SetTrainingAlgorithm(Local<String> property, Local<Value> value, const AccessorInfo& info);
 		static Handle<Value> GetTrainingAlgorithmList(const Arguments &args);
+		static Handle<Value> GetLearningRate(Local<String> property, const AccessorInfo &info);
+		static void SetLearningRate(Local<String> property, Local<Value> value, const AccessorInfo& info);
 		static Handle<Value> GetSmth(Local<String> property, const AccessorInfo &info) {
 			Local<Object> self = info.Holder();
 			NNet *net = ObjectWrap::Unwrap<NNet>(self);
@@ -289,6 +291,25 @@ Handle<Value> NNet::GetTrainingAlgorithmList(const Arguments &args)
 	return scope.Close(result_arr);
 }
 
+Handle<Value> NNet::GetLearningRate(Local<String> property, const AccessorInfo &info)
+{
+	HandleScope scope;
+	Local<Object> self = info.Holder();
+	NNet *net = ObjectWrap::Unwrap<NNet>(self);
+	
+	float rate = fann_get_learning_rate(net->FANN);
+	return scope.Close(Number::New(rate));
+}
+
+void NNet::SetLearningRate(Local<String> property, Local<Value> value, const AccessorInfo& info)
+{
+	HandleScope scope;
+	Local<Object> self = info.Holder();
+	NNet *net = ObjectWrap::Unwrap<NNet>(self);
+
+	fann_set_learning_rate(net->FANN, value->NumberValue());
+}
+
 /* for FANN >= 2.2.0
 Handle<Value> NNet::CreateClone(const Arguments &args)
 {
@@ -478,6 +499,7 @@ void NNet::PrototypeInit(Local<FunctionTemplate> t)
 	NODE_SET_PROTOTYPE_METHOD(t, "training_algorithms", GetTrainingAlgorithmList);
 	t->InstanceTemplate()->SetAccessor(String::New("x"), GetSmth, SetSmth);
 	t->InstanceTemplate()->SetAccessor(String::New("training_algorithm"), GetTrainingAlgorithm, SetTrainingAlgorithm);
+	t->InstanceTemplate()->SetAccessor(String::New("learning_rate"), GetLearningRate, SetLearningRate);
 }
 
 void NNet::Initialize(Handle<Object> target)
