@@ -324,11 +324,9 @@ fann_type *dataset_raw;
 void FANN_API _TrainCB_FromRAW(unsigned int num, unsigned int innum, unsigned int outnum, fann_type *in, fann_type *out) {
 	for (int c=0; c<innum; c++) {
 		in[c] = dataset_raw[num*(innum+outnum) + c];
-		printf("=i %f\n", in[c]);
 	}
 	for (int c=0; c<outnum; c++) {
 		out[c] = dataset_raw[num*(innum+outnum) + innum + c];
-		printf("=o %f\n", out[c]);
 	}
 }
 
@@ -421,7 +419,6 @@ Handle<Value> NNet::Train(const Arguments &args)
 		}
 	}
 	if (scale) {
-		printf("!!!!!!!! %d\n", fann_set_scaling_params(net->FANN, traindata, 0, 1, 0, 1));
 		fann_scale_train(net->FANN, traindata);
 		net->scale_present = true;
 	}
