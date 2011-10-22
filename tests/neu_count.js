@@ -8,3 +8,6 @@ console.log(net.get_total_neurons());
 console.log(net.get_total_connections());
 console.log(net.get_network_type());
 
+console.log(net.get_layer_array());
+console.log(net.get_bias_array());
+

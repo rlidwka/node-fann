@@ -219,3 +219,57 @@ Handle<Value> NNet::GetTotalConnections(const Arguments &args)
 	return scope.Close(Integer::New(ret));
 }
 
+Handle<Value> NNet::GetConnectionRate(const Arguments &args)
+{
+	HandleScope scope;
+	NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
+
+	float ret = fann_get_connection_rate(net->FANN);
+	return scope.Close(Number::New(ret));
+}
+
+Handle<Value> NNet::GetNumLayers(const Arguments &args)
+{
+	HandleScope scope;
+	NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
+
+	unsigned int ret = fann_get_num_layers(net->FANN);
+	return scope.Close(Integer::New(ret));
+}
+
+Handle<Value> NNet::GetLayerArray(const Arguments &args)
+{
+	HandleScope scope;
+	NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
+	
+	int size = fann_get_num_layers(net->FANN);
+	unsigned int* layers = new unsigned int[size];
+	fann_get_layer_array(net->FANN, layers);
+	
+	Local<Array> result_arr = Array::New();
+	for (int i=0; i<size; i++) {
+		result_arr->Set(i, Number::New(layers[i]));
+	}
+
+	delete[] layers;
+	return scope.Close(result_arr);
+}
+
+Handle<Value> NNet::GetBiasArray(const Arguments &args)
+{
+	HandleScope scope;
+	NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
+	
+	int size = fann_get_num_layers(net->FANN);
+	unsigned int* layers = new unsigned int[size];
+	fann_get_bias_array(net->FANN, layers);
+	
+	Local<Array> result_arr = Array::New();
+	for (int i=0; i<size; i++) {
+		result_arr->Set(i, Number::New(layers[i]));
+	}
+
+	delete[] layers;
+	return scope.Close(result_arr);
+}
+

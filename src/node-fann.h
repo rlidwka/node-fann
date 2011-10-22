@@ -33,17 +33,15 @@ class NNet : public ObjectWrap
 		static Handle<Value> GetTotalNeurons(const Arguments &args);
 		static Handle<Value> GetTotalConnections(const Arguments &args);
 		static Handle<Value> GetNetworkType(const Arguments &args);
+		static Handle<Value> GetConnectionRate(const Arguments &args);
+		static Handle<Value> GetNumLayers(const Arguments &args);
+		static Handle<Value> GetLayerArray(const Arguments &args);
+		static Handle<Value> GetBiasArray(const Arguments &args);
 		static void SetLearningRate(Local<String> property, Local<Value> value, const AccessorInfo& info);
 		static void SetLearningMomentum(Local<String> property, Local<Value> value, const AccessorInfo& info);
 		static Handle<Value> Train(const Arguments &args);
 		static Handle<Value> TrainOnce(const Arguments &args);
 		static Handle<Value> Run(const Arguments &args);
-		
-		static Handle<Value> GetTrainingAlgorithmList(const Arguments &args);
-		static Handle<Value> GetActivationFunctionList(const Arguments &args);
-		static Handle<Value> GetErrorFuncList(const Arguments &args);
-		static Handle<Value> GetStopFuncList(const Arguments &args);
-		static Handle<Value> GetNetworkTypeList(const Arguments &args);
 	private:
 		struct fann *FANN;
 		bool scale_present;

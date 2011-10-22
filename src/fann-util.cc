@@ -7,7 +7,7 @@
 #include <doublefann.h>
 #include <string.h>
 #include <ctype.h>
-#include "node-fann.h"
+#include "node-futil.h"
 
 using namespace v8;
 using namespace node;

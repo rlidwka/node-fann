@@ -15,4 +15,9 @@ Handle<Value> NormalizeName(const char* origname, const char* prefix, int prefix
 int _SeekCharArray(Local<String> value, const char* const* array, int size, const char* prefix);
 char* strncpy_lower(char *dest, const char *src, size_t n);
 Handle<Value> VException(const char *msg);
-
+		
+Handle<Value> GetTrainingAlgorithmList(const Arguments &args);
+Handle<Value> GetActivationFunctionList(const Arguments &args);
+Handle<Value> GetErrorFuncList(const Arguments &args);
+Handle<Value> GetStopFuncList(const Arguments &args);
+Handle<Value> GetNetworkTypeList(const Arguments &args);

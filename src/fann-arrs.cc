@@ -5,13 +5,12 @@
 #include <v8.h>
 #include <node.h>
 #include <doublefann.h>
-#include <string.h>
-#include "node-fann.h"
+#include "node-futil.h"
 
 using namespace v8;
 using namespace node;
 
-Handle<Value> NNet::GetTrainingAlgorithmList(const Arguments &args)
+Handle<Value> GetTrainingAlgorithmList(const Arguments &args)
 {
 	HandleScope scope;
 	int size = sizeof(FANN_TRAIN_NAMES)/sizeof(char*);
@@ -24,7 +23,7 @@ Handle<Value> NNet::GetTrainingAlgorithmList(const Arguments &args)
 	return scope.Close(result_arr);
 }
 
-Handle<Value> NNet::GetActivationFunctionList(const Arguments &args)
+Handle<Value> GetActivationFunctionList(const Arguments &args)
 {
 	HandleScope scope;
 	int size = sizeof(FANN_ACTIVATIONFUNC_NAMES)/sizeof(char*);
@@ -37,7 +36,7 @@ Handle<Value> NNet::GetActivationFunctionList(const Arguments &args)
 	return scope.Close(result_arr);
 }
 
-Handle<Value> NNet::GetNetworkTypeList(const Arguments &args)
+Handle<Value> GetNetworkTypeList(const Arguments &args)
 {
 	HandleScope scope;
 	int size = sizeof(FANN_NETTYPE_NAMES)/sizeof(char*);
@@ -50,7 +49,7 @@ Handle<Value> NNet::GetNetworkTypeList(const Arguments &args)
 	return scope.Close(result_arr);
 }
 
-Handle<Value> NNet::GetErrorFuncList(const Arguments &args)
+Handle<Value> GetErrorFuncList(const Arguments &args)
 {
 	HandleScope scope;
 	int size = sizeof(FANN_ERRORFUNC_NAMES)/sizeof(char*);
@@ -63,7 +62,7 @@ Handle<Value> NNet::GetErrorFuncList(const Arguments &args)
 	return scope.Close(result_arr);
 }
 
-Handle<Value> NNet::GetStopFuncList(const Arguments &args)
+Handle<Value> GetStopFuncList(const Arguments &args)
 {
 	HandleScope scope;
 	int size = sizeof(FANN_STOPFUNC_NAMES)/sizeof(char*);
