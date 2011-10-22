@@ -6,7 +6,7 @@
 #include <node.h>
 #include <doublefann.h>
 #include <string.h>
-#include "fann.h"
+#include "node-fann.h"
 
 using namespace v8;
 using namespace node;

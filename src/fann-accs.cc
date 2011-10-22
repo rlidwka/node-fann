@@ -6,21 +6,11 @@
 #include <node.h>
 #include <doublefann.h>
 #include <string.h>
-#include "fann.h"
+#include <ctype.h>
+#include "node-fann.h"
 
 using namespace v8;
 using namespace node;
-
-Handle<Value> NNet::NormalizeName(const char* origname, const char* prefix, int prefix_len)
-{
-	HandleScope scope;
-	char algname[64];
-	if (strncmp(origname, prefix, prefix_len) == 0) {
-		origname +=	prefix_len;
-	} 
-	strncpy(algname, origname, 63);
-	return scope.Close(String::New(origname));
-}
 
 Handle<Value> NNet::GetTrainingAlgorithm(Local<String> property, const AccessorInfo &info)
 {
@@ -31,26 +21,25 @@ Handle<Value> NNet::GetTrainingAlgorithm(Local<String> property, const AccessorI
 	enum fann_train_enum algo = fann_get_training_algorithm(net->FANN);
 
 	if (algo >= 0 && algo < size) {
-		return scope.Close(NormalizeName(FANN_TRAIN_NAMES[algo], TRAIN_PREFIX, TRAIN_PREFIX_LEN));
+		return scope.Close(NormalizeName(FANN_TRAIN_NAMES[algo], TRAIN_PREFIX, sizeof(TRAIN_PREFIX)-1));
 	} else {
 		return Undefined();
 	}
 }
 
-int NNet::_SeekCharArray(Local<String> value, const char* const* array, int size, const char* prefix)
+/*Handle<Value> NNet::GetNetworkType(const Arguments &args)
 {
-	char name[64];
-	char name2[128];
-	value->WriteAscii(name, 0, 63);
-	strcpy(name2, prefix);
-	strcat(name2, name);
-	for (int i=0; i<size; i++) {
-		if (strcasecmp(name, array[i]) == 0 || strcasecmp(name2, array[i]) == 0) {
-			return i;
-		}
+	HandleScope scope;
+	NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
+	int size = sizeof(FANN_TRAIN_NAMES)/sizeof(char*);
+	enum fann_train_enum algo = fann_get_training_algorithm(net->FANN);
+
+	if (algo >= 0 && algo < size) {
+		return scope.Close(NormalizeName(FANN_TRAIN_NAMES[algo], TRAIN_PREFIX, sizeof(TRAIN_PREFIX)-1));
+	} else {
+		return Undefined();
 	}
-	return -1;
-}
+}*/
 
 void NNet::SetTrainingAlgorithm(Local<String> property, Local<Value> value, const AccessorInfo& info)
 {
@@ -69,32 +58,6 @@ void NNet::SetTrainingAlgorithm(Local<String> property, Local<Value> value, cons
 	if (num >= 0 && num < size) {
 		fann_set_training_algorithm(net->FANN, fann_train_enum(num));
 	}
-}
-
-Handle<Value> NNet::GetTrainingAlgorithmList(const Arguments &args)
-{
-	HandleScope scope;
-	int size = sizeof(FANN_TRAIN_NAMES)/sizeof(char*);
-
-	Local<Array> result_arr = Array::New(size);
-	for (int i=0; i<size; i++) {
-		result_arr->Set(i, NormalizeName(FANN_TRAIN_NAMES[i], TRAIN_PREFIX, TRAIN_PREFIX_LEN));
-	}
-	
-	return scope.Close(result_arr);
-}
-
-Handle<Value> NNet::GetActivationFunctionList(const Arguments &args)
-{
-	HandleScope scope;
-	int size = sizeof(FANN_ACTIVATIONFUNC_NAMES)/sizeof(char*);
-
-	Local<Array> result_arr = Array::New(size);
-	for (int i=0; i<size; i++) {
-		result_arr->Set(i, NormalizeName(FANN_ACTIVATIONFUNC_NAMES[i], FANN_PREFIX, FANN_PREFIX_LEN));
-	}
-	
-	return scope.Close(result_arr);
 }
 
 Handle<Value> NNet::GetLearningRate(Local<String> property, const AccessorInfo &info)
@@ -161,7 +124,7 @@ Handle<Value> NNet::ActivationFunction(const Arguments &args)
 
 	enum fann_activationfunc_enum func = fann_get_activation_function(net->FANN, layer, neuron);
 	if (func >= 0 && func < size) {
-		return scope.Close(NormalizeName(FANN_ACTIVATIONFUNC_NAMES[func], FANN_PREFIX, FANN_PREFIX_LEN));
+		return scope.Close(NormalizeName(FANN_ACTIVATIONFUNC_NAMES[func], FANN_PREFIX, sizeof(FANN_PREFIX)-1));
 	} else {
 		return Undefined();
 	}
@@ -188,7 +151,7 @@ Handle<Value> NNet::ActivationFunctionHidden(const Arguments &args)
 
 	enum fann_activationfunc_enum func = fann_get_activation_function(net->FANN, 1, 0);
 	if (func >= 0 && func < size) {
-		return scope.Close(NormalizeName(FANN_ACTIVATIONFUNC_NAMES[func], FANN_PREFIX, FANN_PREFIX_LEN));
+		return scope.Close(NormalizeName(FANN_ACTIVATIONFUNC_NAMES[func], FANN_PREFIX, sizeof(FANN_PREFIX)-1));
 	} else {
 		return Undefined();
 	}
@@ -215,7 +178,7 @@ Handle<Value> NNet::ActivationFunctionOutput(const Arguments &args)
 
 	enum fann_activationfunc_enum func = fann_get_activation_function(net->FANN, fann_get_num_layers(net->FANN)-1, 0);
 	if (func >= 0 && func < size) {
-		return scope.Close(NormalizeName(FANN_ACTIVATIONFUNC_NAMES[func], FANN_PREFIX, FANN_PREFIX_LEN));
+		return scope.Close(NormalizeName(FANN_ACTIVATIONFUNC_NAMES[func], FANN_PREFIX, sizeof(FANN_PREFIX)-1));
 	} else {
 		return Undefined();
 	}

@@ -6,7 +6,7 @@
 #include <node.h>
 #include <doublefann.h>
 #include <string.h>
-#include "fann.h"
+#include "node-fann.h"
 
 using namespace v8;
 using namespace node;
@@ -23,8 +23,13 @@ void NNet::PrototypeInit(Local<FunctionTemplate> t)
 	NODE_SET_PROTOTYPE_METHOD(t, "train", Train);
 	NODE_SET_PROTOTYPE_METHOD(t, "train_once", TrainOnce);
 	NODE_SET_PROTOTYPE_METHOD(t, "run", Run);
-	NODE_SET_PROTOTYPE_METHOD(t, "get_training_algorithms", GetTrainingAlgorithmList);
-	NODE_SET_PROTOTYPE_METHOD(t, "get_activation_functions", GetActivationFunctionList);
+
+	NODE_SET_PROTOTYPE_METHOD(t, "get_all_training_algorithms", GetTrainingAlgorithmList);
+	NODE_SET_PROTOTYPE_METHOD(t, "get_all_activation_functions", GetActivationFunctionList);
+	NODE_SET_PROTOTYPE_METHOD(t, "get_all_network_types", GetNetworkTypesList);
+	NODE_SET_PROTOTYPE_METHOD(t, "get_all_stop_functions", GetStopFuncList);
+	NODE_SET_PROTOTYPE_METHOD(t, "get_all_error_functions", GetErrorFuncList);
+
 	NODE_SET_PROTOTYPE_METHOD(t, "activation_function", ActivationFunction);
 	NODE_SET_PROTOTYPE_METHOD(t, "activation_function_hidden", ActivationFunctionHidden);
 	NODE_SET_PROTOTYPE_METHOD(t, "activation_function_output", ActivationFunctionOutput);
@@ -37,7 +42,7 @@ void NNet::PrototypeInit(Local<FunctionTemplate> t)
 	t->InstanceTemplate()->SetAccessor(String::New("learning_momentum"), GetLearningMomentum, SetLearningMomentum);
 }
 
-void NNet::Initialize(Handle<Object> target)
+void NNet::Initialize(Handle<Object> t)
 {
 	HandleScope scope;
 	Local<FunctionTemplate> t1 = FunctionTemplate::New(NewStandard);
@@ -48,12 +53,18 @@ void NNet::Initialize(Handle<Object> target)
 	PrototypeInit(t2);
 	PrototypeInit(t3);
 //	PrototypeInit(t4);
-	target->Set(String::NewSymbol("standard"), t1->GetFunction());
-	target->Set(String::NewSymbol("shortcut"), t2->GetFunction());
-	target->Set(String::NewSymbol("sparse"), t3->GetFunction());
-//	target->Set(String::NewSymbol("clone"), t4->GetFunction());
-	target->Set(String::NewSymbol("get_training_algorithms"), FunctionTemplate::New(GetTrainingAlgorithmList)->GetFunction());
-	target->Set(String::NewSymbol("get_activation_functions"), FunctionTemplate::New(GetActivationFunctionList)->GetFunction());
+	t->Set(String::NewSymbol("standard"), t1->GetFunction());
+	t->Set(String::NewSymbol("shortcut"), t2->GetFunction());
+	t->Set(String::NewSymbol("sparse"), t3->GetFunction());
+//	t->Set(String::NewSymbol("clone"), t4->GetFunction());
+	t->Set(String::NewSymbol("get_training_algorithms"), FunctionTemplate::New(GetTrainingAlgorithmList)->GetFunction());
+	t->Set(String::NewSymbol("get_activation_functions"), FunctionTemplate::New(GetActivationFunctionList)->GetFunction());
+
+	NODE_SET_METHOD(t, "get_all_training_algorithms", GetTrainingAlgorithmList);
+	NODE_SET_METHOD(t, "get_all_activation_functions", GetActivationFunctionList);
+	NODE_SET_METHOD(t, "get_all_network_types", GetNetworkTypesList);
+	NODE_SET_METHOD(t, "get_all_stop_functions", GetStopFuncList);
+	NODE_SET_METHOD(t, "get_all_error_functions", GetErrorFuncList);
 }
 
 extern "C" void init (Handle<Object> target)
