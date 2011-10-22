@@ -34,6 +34,10 @@ class NNet : public ObjectWrap
 		static Handle<Value> ActivationFunctionHidden(const Arguments &args);
 		static Handle<Value> ActivationFunctionOutput(const Arguments &args);
 		static Handle<Value> GetActivationFunctionList(const Arguments &args);
+		static Handle<Value> GetNumInput(const Arguments &args);
+		static Handle<Value> GetNumOutput(const Arguments &args);
+		static Handle<Value> GetTotalNeurons(const Arguments &args);
+		static Handle<Value> GetTotalConnections(const Arguments &args);
 		static void SetLearningRate(Local<String> property, Local<Value> value, const AccessorInfo& info);
 		static void SetLearningMomentum(Local<String> property, Local<Value> value, const AccessorInfo& info);
 		static Handle<Value> Train(const Arguments &args);

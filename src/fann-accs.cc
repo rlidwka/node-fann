@@ -221,3 +221,39 @@ Handle<Value> NNet::ActivationFunctionOutput(const Arguments &args)
 	}
 }
 
+Handle<Value> NNet::GetNumInput(const Arguments &args)
+{
+	HandleScope scope;
+	NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
+
+	unsigned int ret = fann_get_num_input(net->FANN);
+	return scope.Close(Integer::New(ret));
+}
+
+Handle<Value> NNet::GetNumOutput(const Arguments &args)
+{
+	HandleScope scope;
+	NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
+
+	unsigned int ret = fann_get_num_output(net->FANN);
+	return scope.Close(Integer::New(ret));
+}
+
+Handle<Value> NNet::GetTotalNeurons(const Arguments &args)
+{
+	HandleScope scope;
+	NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
+
+	unsigned int ret = fann_get_total_neurons(net->FANN);
+	return scope.Close(Integer::New(ret));
+}
+
+Handle<Value> NNet::GetTotalConnections(const Arguments &args)
+{
+	HandleScope scope;
+	NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
+
+	unsigned int ret = fann_get_total_connections(net->FANN);
+	return scope.Close(Integer::New(ret));
+}
+
