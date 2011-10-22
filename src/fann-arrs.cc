@@ -6,7 +6,6 @@
 #include <node.h>
 #include <doublefann.h>
 #include <string.h>
-#include <ctype.h>
 #include "node-fann.h"
 
 using namespace v8;
@@ -38,7 +37,7 @@ Handle<Value> NNet::GetActivationFunctionList(const Arguments &args)
 	return scope.Close(result_arr);
 }
 
-Handle<Value> NNet::GetNetworkTypesList(const Arguments &args)
+Handle<Value> NNet::GetNetworkTypeList(const Arguments &args)
 {
 	HandleScope scope;
 	int size = sizeof(FANN_NETTYPE_NAMES)/sizeof(char*);

@@ -32,6 +32,7 @@ class NNet : public ObjectWrap
 		static Handle<Value> GetNumOutput(const Arguments &args);
 		static Handle<Value> GetTotalNeurons(const Arguments &args);
 		static Handle<Value> GetTotalConnections(const Arguments &args);
+		static Handle<Value> GetNetworkType(const Arguments &args);
 		static void SetLearningRate(Local<String> property, Local<Value> value, const AccessorInfo& info);
 		static void SetLearningMomentum(Local<String> property, Local<Value> value, const AccessorInfo& info);
 		static Handle<Value> Train(const Arguments &args);
@@ -42,7 +43,7 @@ class NNet : public ObjectWrap
 		static Handle<Value> GetActivationFunctionList(const Arguments &args);
 		static Handle<Value> GetErrorFuncList(const Arguments &args);
 		static Handle<Value> GetStopFuncList(const Arguments &args);
-		static Handle<Value> GetNetworkTypesList(const Arguments &args);
+		static Handle<Value> GetNetworkTypeList(const Arguments &args);
 	private:
 		struct fann *FANN;
 		bool scale_present;

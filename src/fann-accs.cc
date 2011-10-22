@@ -6,7 +6,6 @@
 #include <node.h>
 #include <doublefann.h>
 #include <string.h>
-#include <ctype.h>
 #include "node-fann.h"
 
 using namespace v8;
@@ -27,19 +26,19 @@ Handle<Value> NNet::GetTrainingAlgorithm(Local<String> property, const AccessorI
 	}
 }
 
-/*Handle<Value> NNet::GetNetworkType(const Arguments &args)
+Handle<Value> NNet::GetNetworkType(const Arguments &args)
 {
 	HandleScope scope;
 	NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
-	int size = sizeof(FANN_TRAIN_NAMES)/sizeof(char*);
-	enum fann_train_enum algo = fann_get_training_algorithm(net->FANN);
+	int size = sizeof(FANN_NETTYPE_NAMES)/sizeof(char*);
+	enum fann_nettype_enum ret = fann_get_network_type(net->FANN);
 
-	if (algo >= 0 && algo < size) {
-		return scope.Close(NormalizeName(FANN_TRAIN_NAMES[algo], TRAIN_PREFIX, sizeof(TRAIN_PREFIX)-1));
+	if (ret >= 0 && ret < size) {
+		return scope.Close(NormalizeName(FANN_NETTYPE_NAMES[ret], NETTYPE_PREFIX, sizeof(NETTYPE_PREFIX)-1));
 	} else {
 		return Undefined();
 	}
-}*/
+}
 
 void NNet::SetTrainingAlgorithm(Local<String> property, Local<Value> value, const AccessorInfo& info)
 {

@@ -26,7 +26,7 @@ void NNet::PrototypeInit(Local<FunctionTemplate> t)
 
 	NODE_SET_PROTOTYPE_METHOD(t, "get_all_training_algorithms", GetTrainingAlgorithmList);
 	NODE_SET_PROTOTYPE_METHOD(t, "get_all_activation_functions", GetActivationFunctionList);
-	NODE_SET_PROTOTYPE_METHOD(t, "get_all_network_types", GetNetworkTypesList);
+	NODE_SET_PROTOTYPE_METHOD(t, "get_all_network_types", GetNetworkTypeList);
 	NODE_SET_PROTOTYPE_METHOD(t, "get_all_stop_functions", GetStopFuncList);
 	NODE_SET_PROTOTYPE_METHOD(t, "get_all_error_functions", GetErrorFuncList);
 
@@ -37,6 +37,7 @@ void NNet::PrototypeInit(Local<FunctionTemplate> t)
 	NODE_SET_PROTOTYPE_METHOD(t, "get_num_output", GetNumOutput);
 	NODE_SET_PROTOTYPE_METHOD(t, "get_total_neurons", GetTotalNeurons);
 	NODE_SET_PROTOTYPE_METHOD(t, "get_total_connections", GetTotalConnections);
+	NODE_SET_PROTOTYPE_METHOD(t, "get_network_type", GetNetworkType);
 	t->InstanceTemplate()->SetAccessor(String::New("training_algorithm"), GetTrainingAlgorithm, SetTrainingAlgorithm);
 	t->InstanceTemplate()->SetAccessor(String::New("learning_rate"), GetLearningRate, SetLearningRate);
 	t->InstanceTemplate()->SetAccessor(String::New("learning_momentum"), GetLearningMomentum, SetLearningMomentum);
@@ -54,15 +55,15 @@ void NNet::Initialize(Handle<Object> t)
 	PrototypeInit(t3);
 //	PrototypeInit(t4);
 	t->Set(String::NewSymbol("standard"), t1->GetFunction());
-	t->Set(String::NewSymbol("shortcut"), t2->GetFunction());
-	t->Set(String::NewSymbol("sparse"), t3->GetFunction());
+	t->Set(String::NewSymbol("sparse"), t2->GetFunction());
+	t->Set(String::NewSymbol("shortcut"), t3->GetFunction());
 //	t->Set(String::NewSymbol("clone"), t4->GetFunction());
 	t->Set(String::NewSymbol("get_training_algorithms"), FunctionTemplate::New(GetTrainingAlgorithmList)->GetFunction());
 	t->Set(String::NewSymbol("get_activation_functions"), FunctionTemplate::New(GetActivationFunctionList)->GetFunction());
 
 	NODE_SET_METHOD(t, "get_all_training_algorithms", GetTrainingAlgorithmList);
 	NODE_SET_METHOD(t, "get_all_activation_functions", GetActivationFunctionList);
-	NODE_SET_METHOD(t, "get_all_network_types", GetNetworkTypesList);
+	NODE_SET_METHOD(t, "get_all_network_types", GetNetworkTypeList);
 	NODE_SET_METHOD(t, "get_all_stop_functions", GetStopFuncList);
 	NODE_SET_METHOD(t, "get_all_error_functions", GetErrorFuncList);
 }
