@@ -50,3 +50,6 @@ class NNet : public ObjectWrap
 		static Handle<Value> NormalizeName(const char* origname, const char* prefix, int prefix_len);
 		static int _SeekCharArray(Local<String> value, const char* const* array, int size, const char* prefix);		
 };
+
+Handle<Value> VException(const char *msg);
+
