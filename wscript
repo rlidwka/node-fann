@@ -15,7 +15,7 @@ def configure(conf):
   if sys.platform == 'darwin':
     os.putenv('PKG_CONFIG_PATH', '/usr/local/lib/pkgconfig')
 
-  conf.check_cfg(package='fann', args='--cflags --libs', mandatory=True)
+  conf.check_cfg(package='fann', args='--cflags --libs', atleast_version='2.1.0', mandatory=True)
 
 def build(bld):
   obj = bld.new_task_gen("cxx", "shlib", "node_addon")
