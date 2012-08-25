@@ -1,6 +1,7 @@
 #include <v8.h>
 #include <node.h>
-#include <doublefann.h>
+//#include <doublefann.h>
+#include <fann.h>
 #include "node-futil.h"
 
 using namespace v8;

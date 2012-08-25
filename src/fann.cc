@@ -4,7 +4,8 @@
 
 #include <v8.h>
 #include <node.h>
-#include <doublefann.h>
+//#include <doublefann.h>
+#include <fann.h>
 #include <string.h>
 #include "node-fann.h"
 
