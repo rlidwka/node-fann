@@ -1,0 +1,19 @@
+{
+  "name": "fann",
+  "author": "Alex Kocharin <alex@kocharin.ru>",
+  "version": "0.1.0",
+  "description": "FANN (Fast Artificial Neural Network Library) bindings for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: sorry... no tests yet, but they will be here sometime\" && exit 1",
+    "install": "node-gyp rebuild || (node-waf configure && node-waf clean && node-waf build)"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rlidwka/node-fann.git"
+  },
+  "keywords": [
+    "fann", "neural", "network", "artificial", "intelligence", "neural network", "artificial intelligence", "machine learning"
+  ],
+  "gypfile": true
+}
