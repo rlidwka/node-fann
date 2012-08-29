@@ -1,19 +1,43 @@
-
+var assert = require('assert');
 var fann = require('../build/Release/fann');
 var net = new fann.standard(1,10,1);
 
-console.log(fann.get_all_activation_functions());
-console.log(net.get_all_activation_functions());
+// activation functions
+var expected = [
+  'linear',
+  'threshold',
+  'threshold_symmetric',
+  'sigmoid',
+  'sigmoid_stepwise',
+  'sigmoid_symmetric',
+  'sigmoid_symmetric_stepwise',
+  'gaussian',
+  'gaussian_symmetric',
+  'gaussian_stepwise',
+  'elliot',
+  'elliot_symmetric',
+  'linear_piece',
+  'linear_piece_symmetric',
+  'sin_symmetric',
+  'cos_symmetric',
+  'sin',
+  'cos' ]
+//console.log(fann.get_all_activation_functions());
+assert.deepEqual(net.get_all_activation_functions(), expected);
 
-console.log(fann.get_all_training_algorithms());
-console.log(net.get_all_training_algorithms());
+var expected = [ 'incremental', 'batch', 'rprop', 'quickprop' ]
+//console.log(fann.get_all_training_algorithms());
+assert.deepEqual(net.get_all_training_algorithms(), expected);
 
-console.log(fann.get_all_stop_functions());
-console.log(net.get_all_stop_functions());
+var expected = [ 'mse', 'bit' ]
+//console.log(fann.get_all_stop_functions());
+assert.deepEqual(net.get_all_stop_functions(), expected);
 
-console.log(fann.get_all_error_functions());
-console.log(net.get_all_error_functions());
+var expected = [ 'linear', 'tanh' ]
+//console.log(fann.get_all_error_functions());
+assert.deepEqual(net.get_all_error_functions(), expected);
 
-console.log(fann.get_all_network_types());
-console.log(net.get_all_network_types());
+var expected = [ 'layer', 'shortcut' ]
+//console.log(fann.get_all_network_types());
+assert.deepEqual(net.get_all_network_types(), expected);
 

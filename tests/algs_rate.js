@@ -1,28 +1,54 @@
-
+var assert = require('assert');
 var fann = require('../build/Release/fann');
 var net = new fann.standard(1,10,1);
 
-console.log(fann);
-console.log(net);
+/*
+ *  Training algorithms
+ */
 
+// wrong algorithm, shouldn't change
 net.training_algorithm = "back";
-console.log(net.training_algorithm, net.training_algorithm == 'RPROP');
+assert.equal(net.training_algorithm, 'rprop');
+
+// but this should
 net.training_algorithm = "incremental";
-console.log(net.training_algorithm, net.training_algorithm == 'INCREMENTAL');
+assert.equal(net.training_algorithm, 'incremental');
+
+// set first alg in the list
 net.training_algorithm = 1;
-console.log(net.training_algorithm, net.training_algorithm == 'BATCH');
+assert.equal(net.training_algorithm, 'batch');
+
+// should drop prefix
 net.training_algorithm = "FANN_TRAIN_INCREMENTAL";
-console.log(net.training_algorithm, net.training_algorithm == 'INCREMENTAL');
+assert.equal(net.training_algorithm, 'incremental');
 
-console.log(net.learning_rate, Math.abs(net.learning_rate-0.7) < 0.01);
+/*
+ *  Learning rates
+ */
+
+// should default to 0.7
+assert(Math.abs(net.learning_rate-0.7) < 0.0001);
+
+// trying to change it
 net.learning_rate = '123';
-console.log(net.learning_rate, net.learning_rate == 123);
-net.learning_rate = 'hi!';
-console.log(net.learning_rate, isNaN(net.learning_rate));
+assert.equal(net.learning_rate, 123);
 
-console.log(net.learning_momentum, net.learning_momentum == 0);
+// wrong rate, change to NaN
+net.learning_rate = 'hi!';
+assert(isNaN(net.learning_rate));
+
+/*
+ *  Learning momentum
+ */
+
+// should default to 0
+assert.equal(net.learning_momentum, 0);
+
+// trying to change it
 net.learning_momentum = '123';
-console.log(net.learning_momentum, net.learning_momentum == 123);
+assert.equal(net.learning_momentum, 123);
+
+// wrong momentum, change to NaN
 net.learning_momentum = 'hi!';
-console.log(net.learning_momentum, isNaN(net.learning_rate));
+assert(isNaN(net.learning_rate));
 
