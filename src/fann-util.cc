@@ -27,7 +27,7 @@ Handle<Value> NormalizeName(const char* origname, const char* prefix, int prefix
 	} 
 //	strncpy(algname, origname, 63);
 	strncpy_lower(algname, origname, 64);
-	algname[64] = 0;
+	algname[63] = 0;
 	return scope.Close(String::New(algname));
 }
 
@@ -37,8 +37,9 @@ int _SeekCharArray(Local<String> value, const char* const* array, int size, cons
 	char name2[128];
 	value->WriteAscii(name, 0, 64);
 	strcpy(name2, prefix);
+	name[63] = 0;
 	strncat(name2, name, 64);
-	name[63] = name2[127] = 0;
+	name2[127] = 0;
 	for (int i=0; i<size; i++) {
 		if (strcasecmp(name, array[i]) == 0 || strcasecmp(name2, array[i]) == 0) {
 			return i;
