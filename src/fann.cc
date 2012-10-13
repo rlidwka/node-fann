@@ -19,6 +19,7 @@ void NNet::PrototypeInit(Local<FunctionTemplate> t)
 	NODE_SET_PROTOTYPE_METHOD(t, "cascadetrain", CascadeTrain);
 	NODE_SET_PROTOTYPE_METHOD(t, "train_once", TrainOnce);
 	NODE_SET_PROTOTYPE_METHOD(t, "run", Run);
+	NODE_SET_PROTOTYPE_METHOD(t, "save", SaveToFile);
 
 	// deprecated in favor of require('fann').get_...
 	/*NODE_SET_PROTOTYPE_METHOD(t, "get_all_training_algorithms", GetTrainingAlgorithmList);
@@ -56,14 +57,16 @@ void NNet::Initialize(Handle<Object> t)
 	Local<FunctionTemplate> t1 = FunctionTemplate::New(NewStandard);
 	Local<FunctionTemplate> t2 = FunctionTemplate::New(NewSparse);
 	Local<FunctionTemplate> t3 = FunctionTemplate::New(NewShortcut);
+	Local<FunctionTemplate> t4 = FunctionTemplate::New(NewFromFile);
 //	Local<FunctionTemplate> t4 = FunctionTemplate::New(CloneNet);
 	PrototypeInit(t1);
 	PrototypeInit(t2);
 	PrototypeInit(t3);
-//	PrototypeInit(t4);
+	PrototypeInit(t4);
 	t->Set(String::NewSymbol("standard"), t1->GetFunction());
 	t->Set(String::NewSymbol("sparse"), t2->GetFunction());
 	t->Set(String::NewSymbol("shortcut"), t3->GetFunction());
+	t->Set(String::NewSymbol("load"), t4->GetFunction());
 //	t->Set(String::NewSymbol("clone"), t4->GetFunction());
 
 	NODE_SET_METHOD(t, "get_all_training_algorithms", GetTrainingAlgorithmList);

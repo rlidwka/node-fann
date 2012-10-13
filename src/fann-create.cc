@@ -20,7 +20,7 @@ NNet::~NNet()
 
 int NNet::_GetLayersFromArray(unsigned int *&layers, Local<Array> a)
 {
-    HandleScope scope;
+	HandleScope scope;
 	int len = a->Length();
 	if (len < 2)
 		return 0;
@@ -37,7 +37,7 @@ int NNet::_GetLayersFromArray(unsigned int *&layers, Local<Array> a)
 
 int NNet::_GetLayersFromArgs(unsigned int *&layers, const Arguments *args, int skip)
 {
-    HandleScope scope;
+	HandleScope scope;
 	int len = args->Length();
 	if (len < 2)
 		return 0;
@@ -54,29 +54,38 @@ int NNet::_GetLayersFromArgs(unsigned int *&layers, const Arguments *args, int s
 
 Handle<Value> NNet::NewStandard(const Arguments &args)
 {
-    HandleScope scope;
+	HandleScope scope;
 	NNet *net = new NNet();
 	net->Wrap(args.This());
 	net->CreateStandard(args);
-    return args.This();
+	return args.This();
 }
 
 Handle<Value> NNet::NewSparse(const Arguments &args)
 {
-    HandleScope scope;
+	HandleScope scope;
 	NNet *net = new NNet();
 	net->Wrap(args.This());
 	net->CreateSparse(args);
-    return args.This();
+	return args.This();
 }
 
 Handle<Value> NNet::NewShortcut(const Arguments &args)
 {
-    HandleScope scope;
+	HandleScope scope;
 	NNet *net = new NNet();
 	net->Wrap(args.This());
 	net->CreateShortcut(args);
-    return args.This();
+	return args.This();
+}
+
+Handle<Value> NNet::NewFromFile(const Arguments &args)
+{
+	HandleScope scope;
+	NNet *net = new NNet();
+	net->Wrap(args.This());
+	net->CreateFromFile(args);
+	return args.This();
 }
 
 /* for FANN >= 2.2.0
@@ -95,9 +104,9 @@ Handle<Value> NNet::CreateStandard(const Arguments &args)
 {
 	unsigned int* layers = NULL;
 	int len = 0;
-    
+
 	if (args.Length() < 1)
-        return VException("No arguments supplied");
+		return VException("No arguments supplied");
 
 	if (args[0]->IsArray()) {
 		len = _GetLayersFromArray(layers, Array::Cast(*args[0]->ToObject()));
@@ -106,7 +115,7 @@ Handle<Value> NNet::CreateStandard(const Arguments &args)
 	}
 	if (len <= 0) {
 		if (layers != NULL) delete[] layers;
-        return VException("Wrong arguments supplied");
+		return VException("Wrong arguments supplied");
 	}
 
 	FANN = fann_create_standard_array(len, layers);
@@ -130,12 +139,12 @@ Handle<Value> NNet::CreateSparse(const Arguments &args)
 {
 	unsigned int* layers = NULL;
 	int len = 0;
-    
+
 	if (args.Length() < 1)
-        return VException("No arguments supplied");
+		return VException("No arguments supplied");
 	
 	if (!args[0]->IsNumber())
-        return VException("First argument should be float");
+		return VException("First argument should be float");
 
 	if (args[1]->IsArray()) {
 		len = _GetLayersFromArray(layers, Array::Cast(*args[1]->ToObject()));
@@ -144,7 +153,7 @@ Handle<Value> NNet::CreateSparse(const Arguments &args)
 	}
 	if (len <= 0) {
 		if (layers != NULL) delete[] layers;
-        return VException("Wrong arguments supplied");
+		return VException("Wrong arguments supplied");
 	}
 
 	FANN = fann_create_sparse_array(args[0]->NumberValue(), len, layers);
@@ -156,9 +165,9 @@ Handle<Value> NNet::CreateShortcut(const Arguments &args)
 {
 	unsigned int* layers = NULL;
 	int len = 0;
-    
+
 	if (args.Length() < 1)
-        return VException("No arguments supplied");
+		return VException("No arguments supplied");
 
 	if (args[0]->IsArray()) {
 		len = _GetLayersFromArray(layers, Array::Cast(*args[0]->ToObject()));
@@ -167,11 +176,40 @@ Handle<Value> NNet::CreateShortcut(const Arguments &args)
 	}
 	if (len <= 0) {
 		if (layers != NULL) delete[] layers;
-        return VException("Wrong arguments supplied");
+		return VException("Wrong arguments supplied");
 	}
 
 	FANN = fann_create_shortcut_array(len, layers);
 	delete[] layers;
+	return Undefined();
+}
+
+Handle<Value> NNet::CreateFromFile(const Arguments &args)
+{
+	HandleScope scope;
+	if (args.Length() != 1 || !args[0]->IsString())
+		return VException("usage: new FANN.load(\"filename.nnet\")");
+	
+	char name[4096];
+	String::Cast(*args[0])->WriteAscii(name, 0, 4096);
+	name[4096] = 0;
+
+	FANN = fann_create_from_file(name);
+	return Undefined();
+}
+
+Handle<Value> NNet::SaveToFile(const Arguments &args)
+{
+	HandleScope scope;
+	if (args.Length() != 1 || !args[0]->IsString())
+		return VException("usage: net.save(\"filename.nnet\")");
+	
+	NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
+	char name[4096];
+	String::Cast(*args[0])->WriteAscii(name, 0, 4096);
+	name[4095] = 0;
+
+	fann_save(net->FANN, name);
 	return Undefined();
 }
 
@@ -190,9 +228,9 @@ Handle<Value> NNet::Run(const Arguments &args)
 	HandleScope scope;
 	NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
 	if (args.Length() < 1)
-        return VException("No arguments supplied");
+		return VException("No arguments supplied");
 	if (!args[0]->IsArray())
-        return VException("First argument should be array");
+		return VException("First argument should be array");
 
 	Local<Array> datain = Array::Cast(*args[0]->ToObject());
 	fann_type *dataset_in = new fann_type[datain->Length()];

@@ -13,11 +13,13 @@ class NNet : public ObjectWrap
 		Handle<Value> CreateStandard(const Arguments &args);
 		Handle<Value> CreateSparse(const Arguments &args);
 		Handle<Value> CreateShortcut(const Arguments &args);
+		Handle<Value> CreateFromFile(const Arguments &args);
 		//Handle<Value> CreateClone(const Arguments &args);
 		static void Initialize(Handle<Object> target);
 		static Handle<Value> NewStandard(const Arguments &args);
 		static Handle<Value> NewSparse(const Arguments &args);
 		static Handle<Value> NewShortcut(const Arguments &args);
+		static Handle<Value> NewFromFile(const Arguments &args);
 		//static Handle<Value> CloneNet(const Arguments &args);
 		static Handle<Value> GetTrainingAlgorithm(Local<String> property, const AccessorInfo &info);
 		static void SetTrainingAlgorithm(Local<String> property, Local<Value> value, const AccessorInfo& info);
@@ -46,6 +48,7 @@ class NNet : public ObjectWrap
 		static Handle<Value> TrainOnce(const Arguments &args);
 		static Handle<Value> Run(const Arguments &args);
 		static Handle<Value> CascadeTrain(const Arguments &args);
+		static Handle<Value> SaveToFile(const Arguments &args);
 	private:
 		struct fann *FANN;
 		bool scale_present;
