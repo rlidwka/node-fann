@@ -43,8 +43,10 @@ void NNet::PrototypeInit(Local<FunctionTemplate> t)
 	NODE_SET_PROTOTYPE_METHOD(t, "get_layer_array", GetLayerArray);
 
 	NODE_SET_PROTOTYPE_METHOD(t, "get_bias_array", GetBiasArray);
-	NODE_SET_PROTOTYPE_METHOD(t, "get_weights", GetWeights);
-	NODE_SET_PROTOTYPE_METHOD(t, "set_weights", SetWeights);
+	NODE_SET_PROTOTYPE_METHOD(t, "get_weight_array", GetWeights);
+	NODE_SET_PROTOTYPE_METHOD(t, "set_weight_array", SetWeights);
+	NODE_SET_PROTOTYPE_METHOD(t, "get_weight", GetWeights);
+	NODE_SET_PROTOTYPE_METHOD(t, "set_weight", SetWeights);
 	t->InstanceTemplate()->SetAccessor(String::New("training_algorithm"), GetTrainingAlgorithm, SetTrainingAlgorithm);
 	t->InstanceTemplate()->SetAccessor(String::New("learning_rate"), GetLearningRate, SetLearningRate);
 	t->InstanceTemplate()->SetAccessor(String::New("learning_momentum"), GetLearningMomentum, SetLearningMomentum);
