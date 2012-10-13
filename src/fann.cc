@@ -38,9 +38,9 @@ void NNet::PrototypeInit(Local<FunctionTemplate> t)
 	NODE_SET_PROTOTYPE_METHOD(t, "get_network_type", GetNetworkType);
 	NODE_SET_PROTOTYPE_METHOD(t, "get_connection_rate", GetConnectionRate);
 
-// use net->layers instead !
-//	NODE_SET_PROTOTYPE_METHOD(t, "get_num_layers", GetNumLayers);
-//	NODE_SET_PROTOTYPE_METHOD(t, "get_layer_array", GetLayerArray);
+	// use net->layers instead ?
+	NODE_SET_PROTOTYPE_METHOD(t, "get_num_layers", GetNumLayers);
+	NODE_SET_PROTOTYPE_METHOD(t, "get_layer_array", GetLayerArray);
 
 	NODE_SET_PROTOTYPE_METHOD(t, "get_bias_array", GetBiasArray);
 	NODE_SET_PROTOTYPE_METHOD(t, "get_weights", GetWeights);
