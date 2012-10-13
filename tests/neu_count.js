@@ -16,6 +16,6 @@ assert.equal(net.get_total_connections(), 44);
 assert.equal(net.get_network_type(), 'shortcut');
 
 // arrays
-assert.deepEqual(net.get_layer_array(), [1,2,3,4]);
+assert.deepEqual(net.layers, [1,2,3,4]);
 assert.deepEqual(net.get_bias_array(), [1,0,0,0]);
 

@@ -3,6 +3,7 @@
  */
 
 #include <string.h>
+#include <stdio.h>
 #include "node-fann.h"
 
 Handle<Value> NNet::GetTrainingAlgorithm(Local<String> property, const AccessorInfo &info)
@@ -231,14 +232,27 @@ Handle<Value> NNet::GetNumLayers(const Arguments &args)
 	return scope.Close(Integer::New(ret));
 }
 
+Handle<Value> NNet::GetLayerArray(Local<String> property, const AccessorInfo &info)
+{
+	HandleScope scope;
+	Local<Object> self = info.Holder();
+	NNet *net = ObjectWrap::Unwrap<NNet>(self);
+	return scope.Close(net->GetLayers());
+}
+
 Handle<Value> NNet::GetLayerArray(const Arguments &args)
 {
 	HandleScope scope;
 	NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
+	return scope.Close(net->GetLayers());
+}
 	
-	int size = fann_get_num_layers(net->FANN);
+Handle<Value> NNet::GetLayers()
+{
+	HandleScope scope;
+	int size = fann_get_num_layers(FANN);
 	unsigned int* layers = new unsigned int[size];
-	fann_get_layer_array(net->FANN, layers);
+	fann_get_layer_array(FANN, layers);
 	
 	Local<Array> result_arr = Array::New();
 	for (int i=0; i<size; i++) {
@@ -265,5 +279,77 @@ Handle<Value> NNet::GetBiasArray(const Arguments &args)
 
 	delete[] layers;
 	return scope.Close(result_arr);
+}
+
+Handle<Value> NNet::GetWeights(const Arguments &args)
+{
+	HandleScope scope;
+	NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
+	int size = fann_get_total_connections(net->FANN);
+	struct fann_connection *conns = new struct fann_connection[size];
+	fann_get_connection_array(net->FANN, conns);
+	
+	Local<Object> result_object = Object::New();
+	for (int i=0; i<size; i++) {
+		Local<Object> obj;
+		if (!result_object->Has(conns[i].from_neuron)) {
+			obj = Object::New();
+			result_object->Set(conns[i].from_neuron, obj);
+		} else {
+			obj = Object::Cast(*result_object->Get(conns[i].from_neuron));
+		}
+		obj->Set(conns[i].to_neuron, Number::New(conns[i].weight));
+	}
+
+	delete[] conns;
+	return scope.Close(result_object);
+}
+
+Handle<Value> NNet::SetWeightsArr(const Arguments &args)
+{
+	HandleScope scope;
+	NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
+	
+	if (!args[0]->IsObject())
+        return VException("First argument should be object");
+	Local<Array> arg = Array::Cast(*args[0]);
+	Local<Array> keys = arg->GetOwnPropertyNames();
+
+	struct fann_connection *conns = new struct fann_connection[fann_get_total_connections(net->FANN)];
+	int counter = 0;
+	for (int i=0; i<keys->Length(); i++) {
+		Local<Value> idx = keys->Get(i);
+		if (!arg->Get(idx)->IsObject()) continue;
+		Local<Object> obj = Object::Cast(*arg->Get(idx));
+		Local<Array> keys2 = obj->GetOwnPropertyNames();
+		for (int j=0; j<keys2->Length(); j++) {
+			conns[counter].from_neuron = idx->IntegerValue();
+			conns[counter].to_neuron = keys2->Get(j)->IntegerValue();
+			conns[counter].weight = obj->Get(keys2->Get(j))->NumberValue();
+			counter++;
+		}
+	}
+	fann_set_weight_array(net->FANN, conns, counter);
+
+	delete[] conns;
+	return Undefined();
+}
+
+Handle<Value> NNet::SetWeights(const Arguments &args)
+{
+	HandleScope scope;
+	if (args[0]->IsObject())
+		return SetWeightsArr(args);
+	
+	NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
+	if (args.Length() < 3)
+        return VException("Usage: set_weights(new_object) or set_weight(from_neuron, to_neuron, weight)");
+
+	unsigned int from_neuron = args[0]->IntegerValue();
+	unsigned int to_neuron = args[1]->IntegerValue();
+	fann_type weight = args[2]->NumberValue();
+
+	fann_set_weight(net->FANN, from_neuron, to_neuron, weight);
+	return Undefined();
 }
 

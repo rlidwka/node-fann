@@ -23,21 +23,21 @@ var expected = [
   'sin',
   'cos' ]
 //console.log(fann.get_all_activation_functions());
-assert.deepEqual(net.get_all_activation_functions(), expected);
+assert.deepEqual(fann.get_all_activation_functions(), expected);
 
 var expected = [ 'incremental', 'batch', 'rprop', 'quickprop' ]
 //console.log(fann.get_all_training_algorithms());
-assert.deepEqual(net.get_all_training_algorithms(), expected);
+assert.deepEqual(fann.get_all_training_algorithms(), expected);
 
 var expected = [ 'mse', 'bit' ]
 //console.log(fann.get_all_stop_functions());
-assert.deepEqual(net.get_all_stop_functions(), expected);
+assert.deepEqual(fann.get_all_stop_functions(), expected);
 
 var expected = [ 'linear', 'tanh' ]
 //console.log(fann.get_all_error_functions());
-assert.deepEqual(net.get_all_error_functions(), expected);
+assert.deepEqual(fann.get_all_error_functions(), expected);
 
 var expected = [ 'layer', 'shortcut' ]
 //console.log(fann.get_all_network_types());
-assert.deepEqual(net.get_all_network_types(), expected);
+assert.deepEqual(fann.get_all_network_types(), expected);
 

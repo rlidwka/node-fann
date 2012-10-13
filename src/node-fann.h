@@ -33,13 +33,19 @@ class NNet : public ObjectWrap
 		static Handle<Value> GetNetworkType(const Arguments &args);
 		static Handle<Value> GetConnectionRate(const Arguments &args);
 		static Handle<Value> GetNumLayers(const Arguments &args);
+		static Handle<Value> GetLayerArray(Local<String> property, const AccessorInfo &info);
 		static Handle<Value> GetLayerArray(const Arguments &args);
+		Handle<Value> GetLayers();
+		static Handle<Value> GetWeights(const Arguments &args);
+		static Handle<Value> SetWeights(const Arguments &args);
+		static Handle<Value> SetWeightsArr(const Arguments &args);
 		static Handle<Value> GetBiasArray(const Arguments &args);
 		static void SetLearningRate(Local<String> property, Local<Value> value, const AccessorInfo& info);
 		static void SetLearningMomentum(Local<String> property, Local<Value> value, const AccessorInfo& info);
 		static Handle<Value> Train(const Arguments &args);
 		static Handle<Value> TrainOnce(const Arguments &args);
 		static Handle<Value> Run(const Arguments &args);
+		static Handle<Value> CascadeTrain(const Arguments &args);
 	private:
 		struct fann *FANN;
 		bool scale_present;
@@ -48,5 +54,6 @@ class NNet : public ObjectWrap
 		static void PrototypeInit(Local<FunctionTemplate> t);
 		Handle<Value> MakeTrainData(const Arguments &args, struct fann_train_data **traindata);
 		Handle<Value> TrainOnData(struct fann_train_data *traindata, unsigned int max_epochs, unsigned int epochs_between_reports, float desired_error);
+		Handle<Value> CascadeTrainOnData(struct fann_train_data *traindata, unsigned int max_neurons, unsigned int neurons_between_reports, float desired_error);
 };
 

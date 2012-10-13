@@ -23,6 +23,7 @@
         'src/fann-accs.cc',
         'src/fann-arrs.cc',
         'src/fann-create.cc',
+        'src/fann-cascade.cc',
         'src/fann-train.cc',
         'src/fann-util.cc',
         'src/fann.cc'
