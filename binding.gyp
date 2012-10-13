@@ -6,7 +6,7 @@
         'cflags': [
           # This next command produces no output but it it will fail
           # (and cause GYP to fail) if we don't have a recent enough
-          # version of sqlite.
+          # version of this library.
           '<!@(pkg-config --atleast-version=2.1.0 fann)',
           '<!@(pkg-config --cflags fann)',
         ],
@@ -15,9 +15,14 @@
         'ldflags': [
           '<!@(pkg-config --libs-only-L --libs-only-other fann)',
         ],
+        # linking against -ldoublefann against of -lfann
         'libraries': [
-          '<!@(pkg-config --libs-only-l fann)',
+          '-ldoublefann',
+          '<!@(echo -lfann)',
         ],
+        'conditions': [
+          ['"always-true"', {'libraries!': ['-lfann']}],
+         ],
       },
       'sources': [
         'src/fann-accs.cc',

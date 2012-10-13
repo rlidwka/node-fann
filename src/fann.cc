@@ -2,14 +2,8 @@
  *   All basic functions and primary connections to node.js
  */
 
-#include <v8.h>
-#include <node.h>
-#include <doublefann.h>
 #include <string.h>
 #include "node-fann.h"
-
-using namespace v8;
-using namespace node;
 
 Handle<Value> VException(const char *msg)
 {

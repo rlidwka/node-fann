@@ -5,8 +5,7 @@
   "description": "FANN (Fast Artificial Neural Network Library) bindings for Node.js",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: sorry... no tests yet, but they will be here sometime\" && exit 1",
-    "install": "node-gyp rebuild || (node-waf configure && node-waf clean && node-waf build)"
+    "test": "echo \"Error: sorry... no tests yet, but they will be here sometime\" && exit 1"
   },
   "repository": {
     "type": "git",
