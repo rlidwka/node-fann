@@ -1,11 +1,8 @@
-#include <v8.h>
-#include <node.h>
-//#include <doublefann.h>
-#include <fann.h>
-#include "node-futil.h"
+/*
+ *  Main FANN class
+ */
 
-using namespace v8;
-using namespace node;
+#include "node-futil.h"
 
 class NNet : public ObjectWrap
 {

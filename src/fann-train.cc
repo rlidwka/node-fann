@@ -2,14 +2,7 @@
  *   All functions related to training a network
  */
 
-#include <v8.h>
-#include <node.h>
-//#include <doublefann.h>
-#include <fann.h>
 #include "node-fann.h"
-
-using namespace v8;
-using namespace node;
 
 fann_type *dataset_raw;
 void FANN_API _TrainCB_FromRAW(unsigned int num, unsigned int innum, unsigned int outnum, fann_type *in, fann_type *out) {

@@ -2,16 +2,9 @@
  *   Utility functions
  */
 
-#include <v8.h>
-#include <node.h>
-//#include <doublefann.h>
-#include <fann.h>
 #include <string.h>
 #include <ctype.h>
 #include "node-futil.h"
-
-using namespace v8;
-using namespace node;
 
 char* strncpy_lower(char *dest, const char *src, size_t n)
 {

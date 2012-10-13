@@ -1,3 +1,7 @@
+/*
+ *  This contains basic declarations, should be included everywhere one way or another
+ */
+
 #include <v8.h>
 #include <node.h>
 //#include <doublefann.h>

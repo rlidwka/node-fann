@@ -2,14 +2,7 @@
  *   All functions related to creation and running a network
  */
 
-#include <v8.h>
-#include <node.h>
-//#include <doublefann.h>
-#include <fann.h>
 #include "node-fann.h"
-
-using namespace v8;
-using namespace node;
 
 NNet::NNet()
 {

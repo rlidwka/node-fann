@@ -2,15 +2,8 @@
  *   All setters, getters and other information providers
  */
 
-#include <v8.h>
-#include <node.h>
-//#include <doublefann.h>
-#include <fann.h>
 #include <string.h>
 #include "node-fann.h"
-
-using namespace v8;
-using namespace node;
 
 Handle<Value> NNet::GetTrainingAlgorithm(Local<String> property, const AccessorInfo &info)
 {
