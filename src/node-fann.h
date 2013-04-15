@@ -30,6 +30,7 @@ class NNet : public ObjectWrap
 		static Handle<Value> ActivationFunctionOutput(const Arguments &args);
 		static Handle<Value> GetNumInput(const Arguments &args);
 		static Handle<Value> GetNumOutput(const Arguments &args);
+		static Handle<Value> GetMse(const Arguments &args);
 		static Handle<Value> GetTotalNeurons(const Arguments &args);
 		static Handle<Value> GetTotalConnections(const Arguments &args);
 		static Handle<Value> GetNetworkType(const Arguments &args);
