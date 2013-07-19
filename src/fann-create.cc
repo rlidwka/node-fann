@@ -26,7 +26,7 @@ int NNet::_GetLayersFromArray(unsigned int *&layers, Local<Array> a)
 		return 0;
 
 	layers = new unsigned int[len];
-	for (int i=0; i<a->Length(); i++) {
+	for (unsigned i=0; i<a->Length(); i++) {
 		int n = a->Get(i)->IntegerValue();
 		if (n < 1)
 			return 0;
@@ -234,7 +234,7 @@ Handle<Value> NNet::Run(const Arguments &args)
 
 	Local<Array> datain = Array::Cast(*args[0]->ToObject());
 	fann_type *dataset_in = new fann_type[datain->Length()];
-	for (int i=0; i<datain->Length(); i++) {
+	for (unsigned i=0; i<datain->Length(); i++) {
 		dataset_in[i] = datain->Get(i)->NumberValue();
 	}
 

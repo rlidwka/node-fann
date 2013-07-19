@@ -12,7 +12,7 @@ char* strncpy_lower(char *dest, const char *src, size_t n)
 	do {
 		if (!n--)
 			return ret;
-	} while (*dest++ = tolower(*src++));
+	} while ((*dest++ = tolower(*src++)) != 0);
 	while (n--)
 		*dest++ = 0;
 	return ret;

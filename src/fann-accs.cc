@@ -317,12 +317,12 @@ Handle<Value> NNet::SetWeightsArr(const Arguments &args)
 
 	struct fann_connection *conns = new struct fann_connection[fann_get_total_connections(net->FANN)];
 	int counter = 0;
-	for (int i=0; i<keys->Length(); i++) {
+	for (unsigned i=0; i<keys->Length(); i++) {
 		Local<Value> idx = keys->Get(i);
 		if (!arg->Get(idx)->IsObject()) continue;
 		Local<Object> obj = Object::Cast(*arg->Get(idx));
 		Local<Array> keys2 = obj->GetOwnPropertyNames();
-		for (int j=0; j<keys2->Length(); j++) {
+		for (unsigned j=0; j<keys2->Length(); j++) {
 			conns[counter].from_neuron = idx->IntegerValue();
 			conns[counter].to_neuron = keys2->Get(j)->IntegerValue();
 			conns[counter].weight = obj->Get(keys2->Get(j))->NumberValue();
