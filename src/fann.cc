@@ -84,3 +84,6 @@ extern "C" void init (Handle<Object> target)
 	NNet::Initialize(target);
 }
 
+#ifdef NODE_MODULE
+NODE_MODULE(fann, init)
+#endif
