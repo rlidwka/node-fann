@@ -178,6 +178,15 @@ Handle<Value> NNet::ActivationFunctionOutput(const Arguments &args)
 	}
 }
 
+Handle<Value> NNet::GetMse(const Arguments &args)
+{
+	HandleScope scope;
+	NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
+
+	float ret = fann_get_MSE(net->FANN);
+	return scope.Close(Number::New(ret));
+}
+
 Handle<Value> NNet::GetNumInput(const Arguments &args)
 {
 	HandleScope scope;
