@@ -6,10 +6,10 @@
 
 fann_type *dataset_raw;
 void FANN_API _TrainCB_FromRAW(unsigned int num, unsigned int innum, unsigned int outnum, fann_type *in, fann_type *out) {
-	for (int c=0; c<innum; c++) {
+	for (unsigned c=0; c<innum; c++) {
 		in[c] = dataset_raw[num*(innum+outnum) + c];
 	}
-	for (int c=0; c<outnum; c++) {
+	for (unsigned c=0; c<outnum; c++) {
 		out[c] = dataset_raw[num*(innum+outnum) + innum + c];
 	}
 }
@@ -22,14 +22,14 @@ Handle<Value> NNet::MakeTrainData(const Arguments &args, struct fann_train_data 
 	if (!args[0]->IsArray())
         return VException("First argument should be 2d-array (training data set)");
 		
-	int input_num = fann_get_num_input(FANN);
-	int output_num = fann_get_num_output(FANN);
+	unsigned input_num = fann_get_num_input(FANN);
+	unsigned output_num = fann_get_num_output(FANN);
 	
 	Local<Array> dataset = Array::Cast(*args[0]->ToObject());
 	dataset_raw = new fann_type[(input_num+output_num) * dataset->Length()];
 	fann_type *dataset_raw_ptr = dataset_raw;
 	//fann_set_user_data(net->FANN, (void*)dataset_raw);
-	for (int i=0; i<dataset->Length(); i++) {
+	for (unsigned i=0; i<dataset->Length(); i++) {
 		Local<Value> t = dataset->Get(i);
 		if (!t->IsArray()) {
 			return VException("First argument should be 2d-array (training data set)");
@@ -52,11 +52,11 @@ Handle<Value> NNet::MakeTrainData(const Arguments &args, struct fann_train_data 
 		if (dataout->Length() != output_num) {
 			return VException("Incorrect dataset (output length doesn't match output layer)");
 		}
-		for (int c=0; c<input_num; c++) {
+		for (unsigned c=0; c<input_num; c++) {
 			*dataset_raw_ptr = datain->Get(c)->NumberValue();
 			dataset_raw_ptr++;
 		}
-		for (int c=0; c<output_num; c++) {
+		for (unsigned c=0; c<output_num; c++) {
 			*dataset_raw_ptr = dataout->Get(c)->NumberValue();
 			dataset_raw_ptr++;
 		}
@@ -127,10 +127,10 @@ Handle<Value> NNet::TrainOnce(const Arguments &args)
 	Local<Array> dataout = Array::Cast(*args[1]->ToObject());
 	fann_type *dataset_in = new fann_type[datain->Length()];
 	fann_type *dataset_out = new fann_type[dataout->Length()];
-	for (int i=0; i<datain->Length(); i++) {
+	for (unsigned i=0; i<datain->Length(); i++) {
 		dataset_in[i] = datain->Get(i)->NumberValue();
 	}
-	for (int i=0; i<dataout->Length(); i++) {
+	for (unsigned i=0; i<dataout->Length(); i++) {
 		dataset_out[i] = dataout->Get(i)->NumberValue();
 	}
 
