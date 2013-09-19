@@ -192,7 +192,7 @@ Handle<Value> NNet::CreateFromFile(const Arguments &args)
 	
 	char name[4096];
 	String::Cast(*args[0])->WriteAscii(name, 0, 4096);
-	name[4096] = 0;
+	name[4095] = 0;
 
 	FANN = fann_create_from_file(name);
 	return Undefined();
