@@ -1,0 +1,28 @@
+# use "yapm install ." if you're installing this from git repository
+
+name: fann
+version: 0.2.2
+description: FANN (Fast Artificial Neural Network Library) bindings for Node.js
+
+author:
+  name: Alex Kocharin
+  email: alex@kocharin.ru
+
+main: index.js
+
+repository:
+  type: git
+  url: git://github.com/rlidwka/node-fann.git
+
+keywords:
+  - fann
+  - neural
+  - network
+  - artificial
+  - intelligence
+  - neural network
+  - artificial intelligence
+  - machine learning
+
+gypfile: true
+
