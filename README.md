@@ -6,11 +6,13 @@ FANN (Fast Artificial Neural Network Library) is a free open source neural netwo
 
 ## Installation
 
-```
-npm install fann
-```
+1. Make sure you have `glib2` and `pkg-config` installed.
 
-You will need [FANN library](http://leenissen.dk/fann/wp/download/) version _>= 2.1.0_.
+   These are quite popular tools and should be available in your software repository/ports.
+
+2. You will need [FANN library](http://leenissen.dk/fann/wp/download/) version _>= 2.1.0_ (libfann2).
+
+3. Run `npm install fann` to install this package.
 
 ## Example
 
