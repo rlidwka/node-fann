@@ -22,7 +22,7 @@
         ],
         'conditions': [
           ['"always-true"', {'libraries!': ['-lfann']}],
-         ],
+        ],
       },
       'sources': [
         'src/fann-accs.cc',
@@ -32,6 +32,16 @@
         'src/fann-train.cc',
         'src/fann-util.cc',
         'src/fann.cc'
+      ],
+      'conditions': [
+        [ 'OS!="win"', {
+          'include_dirs': [
+            '/opt/local/include'
+          ],
+          'library_dirs': [
+            '/opt/local/lib'
+          ]
+        }],
       ],
     }
   ]
