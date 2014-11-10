@@ -50,5 +50,5 @@ assert.equal(net.learning_momentum, 123);
 
 // wrong momentum, change to NaN
 net.learning_momentum = 'hi!';
-assert(isNaN(net.learning_rate));
+assert(isNaN(net.learning_momentum));
 
