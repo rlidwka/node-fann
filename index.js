@@ -1,1 +1,1 @@
-module.exports = require('./build/Release/fann');
+module.exports = require('./build/Release/fann')

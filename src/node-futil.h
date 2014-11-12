@@ -9,19 +9,20 @@
 using namespace v8;
 using namespace node;
 
-const char TRAIN_PREFIX[]  = "FANN_TRAIN_";
-const char FANN_PREFIX[]  = "FANN_";
-const char NETTYPE_PREFIX[]  = "FANN_NETTYPE_";
-const char STOPFUNC_PREFIX[]  = "FANN_STOPFUNC_";
+const char TRAIN_PREFIX[]      = "FANN_TRAIN_";
+const char FANN_PREFIX[]       = "FANN_";
+const char NETTYPE_PREFIX[]    = "FANN_NETTYPE_";
+const char STOPFUNC_PREFIX[]   = "FANN_STOPFUNC_";
 const char ERRORFUNC_PREFIX[]  = "FANN_ERRORFUNC_";
- 
+
 Handle<Value> NormalizeName(const char* origname, const char* prefix, int prefix_len);
 int _SeekCharArray(Local<String> value, const char* const* array, int size, const char* prefix);
 char* strncpy_lower(char *dest, const char *src, size_t n);
 Handle<Value> VException(const char *msg);
-		
+
 Handle<Value> GetTrainingAlgorithmList(const Arguments &args);
 Handle<Value> GetActivationFunctionList(const Arguments &args);
 Handle<Value> GetErrorFuncList(const Arguments &args);
 Handle<Value> GetStopFuncList(const Arguments &args);
 Handle<Value> GetNetworkTypeList(const Arguments &args);
+
