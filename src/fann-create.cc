@@ -119,6 +119,8 @@ Handle<Value> NNet::CreateStandard(const Arguments &args)
   }
 
   FANN = fann_create_standard_array(len, layers);
+  if (FANN == NULL)
+    return VException("Failed to create neural network");
 
 /*const float desired_error = (const float) 0.001;
 const unsigned int max_epochs = 500000;
@@ -157,6 +159,9 @@ Handle<Value> NNet::CreateSparse(const Arguments &args)
   }
 
   FANN = fann_create_sparse_array(args[0]->NumberValue(), len, layers);
+  if (FANN == NULL)
+    return VException("Failed to create neural network");
+
   delete[] layers;
   return Undefined();
 }
@@ -180,6 +185,9 @@ Handle<Value> NNet::CreateShortcut(const Arguments &args)
   }
 
   FANN = fann_create_shortcut_array(len, layers);
+  if (FANN == NULL)
+    return VException("Failed to create neural network");
+
   delete[] layers;
   return Undefined();
 }
@@ -195,6 +203,8 @@ Handle<Value> NNet::CreateFromFile(const Arguments &args)
   name[4095] = 0;
 
   FANN = fann_create_from_file(name);
+  if (FANN == NULL)
+    return VException("Failed to create neural network");
 
   return Undefined();
 }
