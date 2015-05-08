@@ -5,16 +5,10 @@
 #include <string.h>
 #include "node-fann.h"
 
-Handle<Value> VException(const char *msg)
-{
-  HandleScope scope;
-  return ThrowException(Exception::Error(String::New(msg)));
-}
-
 void NNet::PrototypeInit(Local<FunctionTemplate> t)
 {
   t->InstanceTemplate()->SetInternalFieldCount(1);
-  t->SetClassName(String::New("FANN"));
+  t->SetClassName(NanNew<String>("FANN"));
   NODE_SET_PROTOTYPE_METHOD(t, "train", Train);
   NODE_SET_PROTOTYPE_METHOD(t, "cascadetrain", CascadeTrain);
   NODE_SET_PROTOTYPE_METHOD(t, "train_once", TrainOnce);
@@ -48,28 +42,28 @@ void NNet::PrototypeInit(Local<FunctionTemplate> t)
   NODE_SET_PROTOTYPE_METHOD(t, "set_weight_array", SetWeights);
   NODE_SET_PROTOTYPE_METHOD(t, "get_weight", GetWeights);
   NODE_SET_PROTOTYPE_METHOD(t, "set_weight", SetWeights);
-  t->InstanceTemplate()->SetAccessor(String::New("training_algorithm"), GetTrainingAlgorithm, SetTrainingAlgorithm);
-  t->InstanceTemplate()->SetAccessor(String::New("learning_rate"), GetLearningRate, SetLearningRate);
-  t->InstanceTemplate()->SetAccessor(String::New("learning_momentum"), GetLearningMomentum, SetLearningMomentum);
-  t->InstanceTemplate()->SetAccessor(String::New("layers"), GetLayerArray);
+  t->InstanceTemplate()->SetAccessor(NanNew<String>("training_algorithm"), GetTrainingAlgorithm, SetTrainingAlgorithm);
+  t->InstanceTemplate()->SetAccessor(NanNew<String>("learning_rate"), GetLearningRate, SetLearningRate);
+  t->InstanceTemplate()->SetAccessor(NanNew<String>("learning_momentum"), GetLearningMomentum, SetLearningMomentum);
+  t->InstanceTemplate()->SetAccessor(NanNew<String>("layers"), GetLayerArray);
 }
 
 void NNet::Initialize(Handle<Object> t)
 {
-  HandleScope scope;
-  Local<FunctionTemplate> t1 = FunctionTemplate::New(NewStandard);
-  Local<FunctionTemplate> t2 = FunctionTemplate::New(NewSparse);
-  Local<FunctionTemplate> t3 = FunctionTemplate::New(NewShortcut);
-  Local<FunctionTemplate> t4 = FunctionTemplate::New(NewFromFile);
-//  Local<FunctionTemplate> t4 = FunctionTemplate::New(CloneNet);
+  NanScope();
+  Local<FunctionTemplate> t1 = NanNew<FunctionTemplate>(NewStandard);
+  Local<FunctionTemplate> t2 = NanNew<FunctionTemplate>(NewSparse);
+  Local<FunctionTemplate> t3 = NanNew<FunctionTemplate>(NewShortcut);
+  Local<FunctionTemplate> t4 = NanNew<FunctionTemplate>(NewFromFile);
+//  Local<FunctionTemplate> t5 = NanNew<FunctionTemplate>(CloneNet);
   PrototypeInit(t1);
   PrototypeInit(t2);
   PrototypeInit(t3);
   PrototypeInit(t4);
-  t->Set(String::NewSymbol("standard"), t1->GetFunction());
-  t->Set(String::NewSymbol("sparse"), t2->GetFunction());
-  t->Set(String::NewSymbol("shortcut"), t3->GetFunction());
-  t->Set(String::NewSymbol("load"), t4->GetFunction());
+  t->Set(NanNew<String>("standard"), t1->GetFunction());
+  t->Set(NanNew<String>("sparse"), t2->GetFunction());
+  t->Set(NanNew<String>("shortcut"), t3->GetFunction());
+  t->Set(NanNew<String>("load"), t4->GetFunction());
 //  t->Set(String::NewSymbol("clone"), t4->GetFunction());
 
   NODE_SET_METHOD(t, "get_all_training_algorithms", GetTrainingAlgorithmList);
@@ -81,7 +75,7 @@ void NNet::Initialize(Handle<Object> t)
 
 extern "C" void init (Handle<Object> target)
 {
-  HandleScope scope;
+  NanScope();
   NNet::Initialize(target);
 }
 

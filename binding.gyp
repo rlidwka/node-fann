@@ -2,6 +2,7 @@
   'targets': [
     {
       'target_name': 'fann',
+      'include_dirs': [ "<!(node -e \"require('nan')\")" ],
       'direct_dependent_settings': {
         'cflags': [
           # This next command produces no output but it it will fail
@@ -27,8 +28,8 @@
       'sources': [
         'src/fann-accs.cc',
         'src/fann-arrs.cc',
-        'src/fann-create.cc',
         'src/fann-cascade.cc',
+        'src/fann-create.cc',
         'src/fann-train.cc',
         'src/fann-util.cc',
         'src/fann.cc'

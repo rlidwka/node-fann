@@ -15,5 +15,7 @@
   "license"     : { "type"  : "WTFPL"
                   , "url"   : "http://www.wtfpl.net/txt/copying/" },
 
+  "dependencies": { "nan": "~1.8" },
+
   "gypfile"     : true
 }

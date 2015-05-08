@@ -20,7 +20,7 @@ NNet::~NNet()
 
 int NNet::_GetLayersFromArray(unsigned int *&layers, Local<Array> a)
 {
-  HandleScope scope;
+  NanScope();
   int len = a->Length();
   if (len < 2)
     return 0;
@@ -35,92 +35,79 @@ int NNet::_GetLayersFromArray(unsigned int *&layers, Local<Array> a)
   return len;
 }
 
-int NNet::_GetLayersFromArgs(unsigned int *&layers, const Arguments *args, int skip)
+NAN_METHOD(NNet::NewStandard)
 {
-  HandleScope scope;
-  int len = args->Length();
-  if (len < 2)
-    return 0;
-
-  layers = new unsigned int[len];
-  for (int i=skip; i<args->Length(); i++) {
-    int n = (*args)[i]->IntegerValue();
-    if (n < 1)
-      return 0;
-    layers[i] = n;
-  }
-  return len;
-}
-
-Handle<Value> NNet::NewStandard(const Arguments &args)
-{
-  HandleScope scope;
+  NanScope();
   NNet *net = new NNet();
   net->Wrap(args.This());
   net->CreateStandard(args);
-  return args.This();
+  NanReturnValue(args.This());
 }
 
-Handle<Value> NNet::NewSparse(const Arguments &args)
+NAN_METHOD(NNet::NewSparse)
 {
-  HandleScope scope;
+  NanScope();
   NNet *net = new NNet();
   net->Wrap(args.This());
   net->CreateSparse(args);
-  return args.This();
+  NanReturnValue(args.This());
 }
 
-Handle<Value> NNet::NewShortcut(const Arguments &args)
+NAN_METHOD(NNet::NewShortcut)
 {
-  HandleScope scope;
+  NanScope();
   NNet *net = new NNet();
   net->Wrap(args.This());
   net->CreateShortcut(args);
-  return args.This();
+  NanReturnValue(args.This());
 }
 
-Handle<Value> NNet::NewFromFile(const Arguments &args)
+NAN_METHOD(NNet::NewFromFile)
 {
-  HandleScope scope;
+  NanScope();
   NNet *net = new NNet();
   net->Wrap(args.This());
   net->CreateFromFile(args);
-  return args.This();
+  NanReturnValue(args.This());
 }
 
 /* for FANN >= 2.2.0
-Handle<Value> NNet::CloneNet(const Arguments &args)
+NAN_METHOD(NNet::CloneNet)
 {
-    HandleScope scope;
+    NanScope();
 //    if (!NNet::HasInstance(args[0]))
-//      return VException("First argument must be existing network.");
+//      return NanThrowError("First argument must be existing network.");
   NNet *net = new NNet();
   net->Wrap(args.This());
   net->CreateClone(args);
-    return args.This();
+    NanReturnValue(args.This());
 }*/
 
-Handle<Value> NNet::CreateStandard(const Arguments &args)
+NAN_METHOD(NNet::CreateStandard)
 {
   unsigned int* layers = NULL;
   int len = 0;
 
   if (args.Length() < 1)
-    return VException("No arguments supplied");
+    return NanThrowError("No arguments supplied");
 
   if (args[0]->IsArray()) {
-    len = _GetLayersFromArray(layers, Array::Cast(*args[0]->ToObject()));
+    len = _GetLayersFromArray(layers, args[0].As<Array>());
   } else {
-    len = _GetLayersFromArgs(layers, &args);
+    Local<Array> arr = NanNew<Array>();
+    for (int i=0; i<args.Length(); i++) {
+      arr->Set(i, args[i]);
+    }
+    len = _GetLayersFromArray(layers, arr);
   }
   if (len <= 0) {
     if (layers != NULL) delete[] layers;
-    return VException("Wrong arguments supplied");
+    return NanThrowError("Wrong arguments supplied");
   }
 
   FANN = fann_create_standard_array(len, layers);
   if (FANN == NULL)
-    return VException("Failed to create neural network");
+    return NanThrowError("Failed to create neural network");
 
 /*const float desired_error = (const float) 0.001;
 const unsigned int max_epochs = 500000;
@@ -134,116 +121,122 @@ fann_save(ann, "xor_float.net");
 
 fann_destroy(ann);*/
   delete[] layers;
-  return Undefined();
+  NanReturnUndefined();
 }
 
-Handle<Value> NNet::CreateSparse(const Arguments &args)
+NAN_METHOD(NNet::CreateSparse)
 {
   unsigned int* layers = NULL;
   int len = 0;
 
   if (args.Length() < 1)
-    return VException("No arguments supplied");
+    return NanThrowError("No arguments supplied");
 
   if (!args[0]->IsNumber())
-    return VException("First argument should be float");
+    return NanThrowError("First argument should be float");
 
   if (args[1]->IsArray()) {
-    len = _GetLayersFromArray(layers, Array::Cast(*args[1]->ToObject()));
+    len = _GetLayersFromArray(layers, args[1].As<Array>());
   } else {
-    len = _GetLayersFromArgs(layers, &args, 1);
+    Local<Array> arr = NanNew<Array>();
+    /* skip 1st argument here */
+    for (int i=1; i<args.Length(); i++) {
+      arr->Set(i-1, args[i]);
+    }
+    len = _GetLayersFromArray(layers, arr);
   }
   if (len <= 0) {
     if (layers != NULL) delete[] layers;
-    return VException("Wrong arguments supplied");
+    return NanThrowError("Wrong arguments supplied");
   }
 
   FANN = fann_create_sparse_array(args[0]->NumberValue(), len, layers);
   if (FANN == NULL)
-    return VException("Failed to create neural network");
+    return NanThrowError("Failed to create neural network");
 
   delete[] layers;
-  return Undefined();
+  NanReturnUndefined();
 }
 
-Handle<Value> NNet::CreateShortcut(const Arguments &args)
+NAN_METHOD(NNet::CreateShortcut)
 {
   unsigned int* layers = NULL;
   int len = 0;
 
   if (args.Length() < 1)
-    return VException("No arguments supplied");
+    return NanThrowError("No arguments supplied");
 
   if (args[0]->IsArray()) {
-    len = _GetLayersFromArray(layers, Array::Cast(*args[0]->ToObject()));
+    len = _GetLayersFromArray(layers, args[0].As<Array>());
   } else {
-    len = _GetLayersFromArgs(layers, &args);
+    Local<Array> arr = NanNew<Array>();
+    for (int i=0; i<args.Length(); i++) {
+      arr->Set(i, args[i]);
+    }
+    len = _GetLayersFromArray(layers, arr);
   }
   if (len <= 0) {
     if (layers != NULL) delete[] layers;
-    return VException("Wrong arguments supplied");
+    return NanThrowError("Wrong arguments supplied");
   }
 
   FANN = fann_create_shortcut_array(len, layers);
   if (FANN == NULL)
-    return VException("Failed to create neural network");
+    return NanThrowError("Failed to create neural network");
 
   delete[] layers;
-  return Undefined();
+  NanReturnUndefined();
 }
 
-Handle<Value> NNet::CreateFromFile(const Arguments &args)
+NAN_METHOD(NNet::CreateFromFile)
 {
-  HandleScope scope;
+  NanScope();
   if (args.Length() != 1 || !args[0]->IsString())
-    return VException("usage: new FANN.load(\"filename.nnet\")");
+    return NanThrowError("usage: new FANN.load(\"filename.nnet\")");
 
-  char name[4096];
-  String::Cast(*args[0])->WriteAscii(name, 0, 4096);
-  name[4095] = 0;
+  String::Utf8Value name(args[0].As<String>());
 
-  FANN = fann_create_from_file(name);
+  FANN = fann_create_from_file(*name);
   if (FANN == NULL)
-    return VException("Failed to create neural network");
+    return NanThrowError("Failed to create neural network");
 
-  return Undefined();
+  NanReturnUndefined();
 }
 
-Handle<Value> NNet::SaveToFile(const Arguments &args)
+NAN_METHOD(NNet::SaveToFile)
 {
-  HandleScope scope;
+  NanScope();
   if (args.Length() != 1 || !args[0]->IsString())
-    return VException("usage: net.save(\"filename.nnet\")");
+    return NanThrowError("usage: net.save(\"filename.nnet\")");
 
   NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
-  char name[4096];
-  String::Cast(*args[0])->WriteAscii(name, 0, 4096);
-  name[4095] = 0;
 
-  fann_save(net->FANN, name);
-  return Undefined();
+  String::Utf8Value name(args[0].As<String>());
+
+  fann_save(net->FANN, *name);
+  NanReturnUndefined();
 }
 
 /* for FANN >= 2.2.0
-Handle<Value> NNet::CreateClone(const Arguments &args)
+NAN_METHOD(NNet::CreateClone)
 {
   NNet *currnet = ObjectWrap::Unwrap<NNet>(args.This());
   NNet *oldnet = ObjectWrap::Unwrap<NNet>(args[0]->ToObject());
   currnet->FANN = fann_copy(oldnet->FANN);
 //  printf("!!!!!!!!!!!!!! %d %d\n", currnet->something, oldnet->something);
-  return Undefined();
+  NanReturnUndefined();
 }*/
 
-Handle<Value> NNet::Run(const Arguments &args)
+NAN_METHOD(NNet::Run)
 {
-  HandleScope scope;
+  NanScope();
   NNet *net = ObjectWrap::Unwrap<NNet>(args.This());
   if (args.Length() < 1)
-    return VException("No arguments supplied");
+    return NanThrowError("No arguments supplied");
   if (!args[0]->IsArray())
-    return VException("First argument should be array");
+    return NanThrowError("First argument should be array");
 
-  Local<Array> datain = Array::Cast(*args[0]->ToObject());
+  Local<Array> datain = args[0].As<Array>();
   fann_type *dataset_in = new fann_type[datain->Length()];
   for (unsigned i=0; i<datain->Length(); i++) {
     dataset_in[i] = datain->Get(i)->NumberValue();
@@ -256,11 +249,11 @@ Handle<Value> NNet::Run(const Arguments &args)
   }
 
   int dim = fann_get_num_output(net->FANN);
-  Local<Array> result_arr = Array::New(dim);
+  Local<Array> result_arr = NanNew<Array>(dim);
   for (int i=0; i<dim; i++) {
-    result_arr->Set(i, Number::New(result[i]));
+    result_arr->Set(i, NanNew<Number>(result[i]));
   }
 
-  return scope.Close(result_arr);
+  NanReturnValue(result_arr);
 }
 
