@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - '0.10'
+  - '0.12'
+  - 'iojs-1'
+  - 'iojs-2'
+  - 'iojs'
+sudo: true
+before_install:
+  - sudo apt-get update -q
+  - sudo apt-get install -y libfann-dev
+script: npm install . && npm test
