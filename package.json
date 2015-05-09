@@ -1,6 +1,6 @@
 {
   "name"            : "fann",
-  "version"         : "0.2.4",
+  "version"         : "1.0.0",
   "description"     : "FANN (Fast Artificial Neural Network Library) bindings for Node.js",
 
   "author"          : { "name"  : "Alex Kocharin"
