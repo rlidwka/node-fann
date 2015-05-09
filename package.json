@@ -1,21 +1,25 @@
 {
-  "name"        : "fann",
-  "version"     : "0.2.4",
-  "description" : "FANN (Fast Artificial Neural Network Library) bindings for Node.js",
+  "name"            : "fann",
+  "version"         : "0.2.4",
+  "description"     : "FANN (Fast Artificial Neural Network Library) bindings for Node.js",
 
-  "author"      : { "name"  : "Alex Kocharin"
-                  , "email" : "alex@kocharin.ru" },
+  "author"          : { "name"  : "Alex Kocharin"
+                      , "email" : "alex@kocharin.ru" },
 
-  "repository"  : { "type"  : "git"
-                  , "url"   : "git://github.com/rlidwka/node-fann.git" },
+  "repository"      : { "type"  : "git"
+                      , "url"   : "git://github.com/rlidwka/node-fann.git" },
 
-  "keywords"    : [ "fann", "neural", "network", "artificial", "intelligence"
-                  , "neural network", "artificial intelligence", "machine learning" ],
+  "keywords"        : [ "fann", "neural", "network", "artificial", "intelligence"
+                      , "neural network", "artificial intelligence", "machine learning" ],
 
-  "license"     : { "type"  : "WTFPL"
-                  , "url"   : "http://www.wtfpl.net/txt/copying/" },
+  "license"         : { "type"  : "WTFPL"
+                      , "url"   : "http://www.wtfpl.net/txt/copying/" },
 
-  "dependencies": { "nan": "~1.8" },
+  "dependencies"    : { "nan"   : "~1.8" },
 
-  "gypfile"     : true
+  "devDependencies" : { "mocha" : "2" },
+
+  "scripts"         : { "test"  : "mocha ./test -R dot" },
+
+  "gypfile"         : true
 }
